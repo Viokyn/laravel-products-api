@@ -1,58 +1,109 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🛒 Laravel Products API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+API RESTful de gerenciamento de produtos com autenticação via token, construída com Laravel 13 e PHP 8.3.
 
-## About Laravel
+## 🚀 Tecnologias
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- PHP 8.3
+- Laravel 13
+- SQLite
+- Laravel Sanctum (autenticação por token)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📋 Endpoints
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Autenticação
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| POST | /api/register | Cadastro de usuário |
+| POST | /api/login | Login — retorna token |
+| POST | /api/logout | Logout (requer token) |
 
-## Learning Laravel
+### Produtos — rotas públicas
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | /api/produtos | Lista todos os produtos |
+| GET | /api/produtos/{id} | Busca produto por ID |
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Produtos — rotas protegidas (requer token)
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| POST | /api/produtos | Cria novo produto |
+| PUT | /api/produtos/{id} | Atualiza produto |
+| DELETE | /api/produtos/{id} | Deleta produto |
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## ⚙️ Como rodar localmente
 
 ```bash
-composer require laravel/boost --dev
+# Clone o repositório
+git clone https://github.com/Viokyn/php-laravel.git
+cd php-laravel
 
-php artisan boost:install
+# Instala as dependências
+composer install
+
+# Configura o ambiente
+cp .env.example .env
+php artisan key:generate
+
+# Cria o banco e roda as migrations
+php artisan migrate
+
+# Sobe o servidor
+php artisan serve
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+A API estará disponível em `http://127.0.0.1:8000`
 
-## Contributing
+## 🔐 Autenticação
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Esta API usa autenticação via Bearer Token com Laravel Sanctum.
 
-## Code of Conduct
+**1. Registre um usuário:**
+```json
+POST /api/register
+{
+    "name": "Seu Nome",
+    "email": "email@exemplo.com",
+    "password": "123456"
+}
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+**2. Faça login e copie o token retornado:**
+```json
+POST /api/login
+{
+    "email": "email@exemplo.com",
+    "password": "123456"
+}
+```
 
-## Security Vulnerabilities
+**3. Use o token nas rotas protegidas:**
+```
+Authorization: Bearer <seu_token_aqui>
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 📦 Exemplo de uso
 
-## License
+**Criar produto (autenticado):**
+```json
+POST /api/produtos
+{
+    "nome": "Notebook",
+    "preco": 3500.00
+}
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+**Resposta:**
+```json
+{
+    "id": 1,
+    "nome": "Notebook",
+    "preco": 3500,
+    "created_at": "2026-04-23T14:00:00.000000Z",
+    "updated_at": "2026-04-23T14:00:00.000000Z"
+}
+```
+
+## 👨‍💻 Autor
+
+Desenvolvido por [Filippe (Viokyn)](https://github.com/Viokyn)
